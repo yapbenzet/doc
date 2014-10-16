@@ -1,0 +1,38 @@
+gecislerde ekran kararmasi cozumu
+=================================
+options bolumune "screenSaverSync = false" ekle.
+
+
+acmadan once "xset -dpms" komutunu calistir
+
+
+client conf
+============
+client hostname ayarlanmali
+
+## /etc/gdm3/Init/Default ##
+  /usr/bin/killall synergyc
+  sleep 1
+  /usr/bin/synergyc [IP]
+
+
+server conf
+===========
+section: screens
+        debian:
+        DebUSB1:
+end
+
+section: links
+        DebUSB1:
+                right = debian
+        debian:
+                left = DebUSB1
+end
+section: options
+		 address = [IP]
+		 keystroke(control+alt+1) = switchInDirection(left)
+		 keystroke(control+alt+2) = switchInDirection(right)
+		 keystroke(control+alt+0) = switchToScreen(debian)
+		 keystroke(control+alt+9) = switchToScreen(DebUSB1)
+end

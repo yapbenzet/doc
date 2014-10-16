@@ -1,0 +1,19 @@
+testuser ile adb erisimi
+========================
+http://developer.android.com/tools/device.html
+
+pkill adb
+rm /tmp/5037
+plugdev grubuna ekle
+
+udev rules (/etc/udev/rules.d/51-android.rules)
+	 SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", MODE="0666", GROUP="plugdev"
+
+
+// 99-android.rules calisti ???
+
+emulator problemi
+=================
+ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1 /home/testuser/adt-bundle-linux-x86_64-20140624/sdk/tools/lib/libGL.so
+
+LD_LIBRARY_PATH=/home/testuser/adt-bundle-linux-x86_64-20140624/sdk/tools/lib/ adt-bundle-linux-x86_64-20140624/sdk/tools/emulator64-x86 -no-audio  -avd b

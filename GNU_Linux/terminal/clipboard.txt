@@ -1,0 +1,2 @@
+## clean ##
+xclip -selection clipboard /dev/null

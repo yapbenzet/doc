@@ -1,0 +1,15 @@
+sunucu
+======
+
+
+## dizindeki deb paketlerinin listesini olusturma ##
+ dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+
+amd64 dizini altinda olusturulabilir
+
+
+istemci
+=======
+
+## sources.list eklenen ##
+deb http://[adres]/ amd64/

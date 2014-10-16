@@ -1,0 +1,3 @@
+## sshfs reverse mount ##
+dpipe /usr/lib/openssh/sftp-server = ssh user@REMOTE_MACHINE sshfs localhost:LOCAL_DIR REMOTE_MACHINE_DIR -o slave
+

@@ -1,0 +1,30 @@
+compression
+===========
+-C
+
+proxy
+=====
+ssh -N -D [port] user@ip
+
+remove known host
+=================
+ssh-keygen -R [localhost]:2222
+
+restricted tunnel user
+======================
+useradd sshtunnel -m -d /home/sshtunnel -s /bin/false
+
+~/.ssh/authorized_keys
+no-pty,no-X11-forwarding,no-agent-forwarding,command="/bin/echo do-not-send-commands" ssh-rsa rsa-public-key-code-goes-here keyuser@keyhost
+
+public key auth
+===============
+client'daki id_rsa.pub icerigi ~/.ssh/authorized_keys dosyasina eklenir.
+
+baglanti gec aciliyorsa
+========================
+/etc/ssh/sshd_config dosyasina "UseDNS no" satirini ekle
+
+
+## root x window ##
+cp ~/.Xauthority /root/

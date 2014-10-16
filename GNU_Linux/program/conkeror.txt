@@ -1,0 +1,9 @@
+-
+=========
+http://conkeror.org/ModeLine
+http://conkeror.org/Tips#Auto-hide_the_Minibuffer_and_Mode_Line
+
+clear form history
+==================
+rm ~/.mozilla/firefox/*.default/formhistory.sqlite
+

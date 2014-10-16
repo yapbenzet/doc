@@ -1,0 +1,18 @@
+encrypt folder
+==============
+gpg-zip -c --gpg-args --cipher-algo=[algo] -o [file_name] [folder]
+
+encrypt file
+============
+gpg -c --cipher-algo [algo] file
+
+to stdout
+=========
+gpg -c --output - [infile] | base64
+gpg -c -o- [infile] | base64
+
+
+default algo
+============
+~/.gnupg/gpg.conf
+personal-cipher-preferences [ALGO]

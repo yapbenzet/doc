@@ -1,0 +1,6 @@
+pgerp -f [command]
+
+
+# "/bin/getty ... tty1" seklindeki bir seyi almak icin:
+pgrep -f '(/bin/getty)*(tty1)'
+

@@ -1,0 +1,108 @@
+ILK KURULUM
+============
+## create a new user ##
+sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws create_user -e user@example.com
+## set or change password ##
+sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws changepassword user
+## set user to staff ##
+sudo -u www-data /edx/bin/python.edxapp ./manage.py lms --settings aws set_staff user@example.com
+## BASE_URL ##
+/edx/app/edxapp
+cms.env.json ve lms.env.json dosyalarinda CMS_BASE, LMS_BASE gibi degiskenleri degistir
+## timezone ##
+cms.env.json ve lms.env.json dosyalarinda timezone sistmele ayni olmali (Asia/Istanbul)
+
+## email ## (denenmedi)
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'youruser@yourdomain.com' # or youruser@gmail.com
+EMAIL_HOST_PASSWORD = 'YourPassword'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'you@yourdomain.com'
+
+
+Yonetim
+=======
+## status ##
+sudo /edx/bin/supervisorctl -c /edx/etc/supervisord.conf status
+
+## restart ##
+sudo /edx/bin/supervisorctl -c /edx/etc/supervisord.conf restart edxapp:
+sudo /edx/bin/supervisorctl -c /edx/etc/supervisord.conf restart edxapp_worker:
+
+
+
+Yeni ders ekleme
+================
+
+## programlama sorusu ##
+ <coderesponse queuename="denemeler">
+queuename ile kuyruk olustur. Bir ders icin bir kuyruk yeterli
+
+## kuyruk ekleme ##
+/edx/app/xqueue/xqueue.env.json
+## kuyruk restart ##
+sudo /edx/bin/supervisorctl -c /edx/etc/supervisord.conf restart xqueue:
+
+
+
+
+grader server
+=============
+sudo easy_install path.py==2.4.1
+sudo easy_install requests==0.14.2
+sudo pip install dogstatsd-python==0.2
+sudo apt-get install gcc
+
+
+manage py
+==========
+cd edx/app/edxapp/edx-platform  && sudo -u www-data ./manage.py
+
+
+disable memcache
+================
+/edx/app/edxapp/lms.env.json
+/edx/app/edxapp/cms.env.json
+
+ "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+yerine
+  "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+
+NOT: memcache kapatilinca duzgun calismiyor
+
+disable services
+================
+/edx/etc/conf.d/ dizini altindan gerekli serviserin dosyalarini yorum satiri yap
+
+
+
+domain name configuration
+=========================
+domain : www.example.org
+
+/edx/app/edxapp/lms.env.json
+/edx/app/edxapp/cms.env.json
+
+LSM_BASE:www.example.org
+CMS_BASE:www.example.org:18010,
+PREVIEW_LMS_BASE:www.example.org
+SESSION_COOKIE_DOMAIN:.example.org
+
+xqueue'nin calismasi icin lms sunucusunun kendisinin domain adini gormesi gerekiyor.
+/etc/hosts icine "[local_ip] [www.example.org]" satiri eklenerek cozulebiliyor
+
+
+tema
+====
+https://github.com/edx/edx-platform/wiki/Stanford-Theming
+		manual method
+
+https://github.com/edx/configuration/wiki/edX-Managing-the-Production-Stack#compile-assets-manually
+		compile assets manually
+
+iki klasore de kopyaladik
+/edx/app/edxapp/themes/
+/edx/var/edxapp/themes/
+
+tema adi default

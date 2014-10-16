@@ -1,0 +1,11 @@
+## disable F10 key ##
+
+.config/gtk-3.0/gtk.css dosyasi olustur:
+
+@binding-set NoKeyboardNavigation {
+			 unbind "<shift>F10"
+}
+
+* {
+  gtk-key-bindings: NoKeyboardNavigation
+}

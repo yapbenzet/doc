@@ -1,0 +1,16 @@
+## mp3 bitrate degistirme ##
+output dizini: b
+for i in *.mp3; do
+	avconv -i "$i" -ab 192k "b/$i";
+done
+
+## mp4a to mp3 ##
+for i in *.m4a do
+	ffmpeg -i "$i" -ab 320k "${i%m4a}mp3"
+done
+
+
+## ogg to mp3 ##
+for x in *.ogg;
+	do sox "$x" -C 192.2 "`basename "$x" .ogg`.mp3";
+done

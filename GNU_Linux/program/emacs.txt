@@ -1,0 +1,17 @@
+kod tamamlama problemi
+======================
+problem oldugunda semanticdb silinip yeniden indexlenebilir
+rm -rf ~/.semanticdb
+
+buyuk-kucuk harf yapma
+=======================
+M-l
+    Convert following word to lower case (downcase-word).
+M-u
+    Convert following word to upper case (upcase-word).
+M-c
+    Capitalize the following word (capitalize-word).
+C-x C-l
+    Convert region to lower case (downcase-region).
+C-x C-u
+    Convert region to upper case (upcase-region).

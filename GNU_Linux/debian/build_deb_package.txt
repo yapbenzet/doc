@@ -1,0 +1,87 @@
+
+paket derleme
+=============
+
+apt-get source [package]
+dpkg-buildpackage -us -uc -rfakeroot
+
+
+# kaynak kodu otomatik indirerek derleme #
+
+apt-get --build source package_name
+
+## derleme bagimliliklari ##
+apt-get build-dep PACKAGE_NAME
+
+## derleme bagimliliklarini temizleme ##
+http://www.webupd8.org/2010/10/undo-apt-get-build-dep-remove-build.html
+
+sudo aptitude markauto $(apt-cache showsrc PACKAGE_NAME | sed -e '/Build-Depends/!d;s/Build-Depends: \|,\|([^)]*),*\|\[[^]]*\]//g')
+sudo apt-get autoremove
+
+
+
+edit deb package
+================
+apt-get install devscripts
+apt-get install quilt
+
+
+(http://cs-people.bu.edu/doucette/xia/guides/debian-patch.txt)
+
+The quilt patch system manages a stack of patches to the original source.
+Since we want to add a new patch, we must first apply all patches contained
+in the package.
+
+  $ export QUILT_PATCHES=debian/patches
+  $ quilt push -a
+  File series fully applied, ends at patch 16_licence_about_location.patch
+
+Now we can create our patch. We'll prefix with with "17_" since the last
+patch in debian/patches is prefixed with "16_".
+
+  $ quilt new 17_readme.patch
+  Patch 17_readme.patch is now on top
+  $ quilt add README          # do this for every file you edit
+  File README added to patch 17_readme.patch
+  $ echo 'This wireshark has XIA support' >> README
+  $ quilt refresh
+  Refreshed patch 17_readme.patch
+  $ quilt pop -a
+
+You can now build the package, but first you need to install its build dependencies.
+
+  # apt-get build-dep wireshark
+
+If you decide to rename the package (say, to "wireshark-xia"), you must do so
+in two places: first, add a new entry to the debian/changelog file (be sure
+to respect the indentation; it must be exactly the same as in the other
+entries). In your entry, instead of using "wireshark" as the package name
+in the first line of the changelog entry, change it to "wireshark-xia". The
+changelog can be edited by using the dch utility. To add a new entry to the
+changelog, issue:
+
+  $ dch -i
+
+Here you can rename the package, change the version, add in your name/email
+address, and provide a synopsis of changes made.
+
+!!! eger paketin adi degisirse debian/paketadi.install gibi dosyalari da
+    degistirmek gerek
+
+Second, edit the debian/control file and change the "Source:" header to
+"wireshark-xia" and change the "Package:" headers to add the new name. For
+example, change "Package: wireshark-common" to "Package: wireshark-xia-common".
+Note that some libraries are also built from this package (eg. libwireshark1,
+libwiretap1). If you rename those too, be sure to replace the old name globally
+in the control file, because some of the packages depend on those libraries,
+and the name listed in the "Depends:" header must match with the one declared
+in the "Package:" header. If you do change the package naming scheme, you will
+have to change the name of the original tarball in order to execute the debuild
+step.
+
+Finally, you can now generate the debian package:
+
+  # apt-get install devscripts
+  $ debuild -uc -us
+

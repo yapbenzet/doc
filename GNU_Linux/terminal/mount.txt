@@ -1,0 +1,43 @@
+mount nfs
+=========
+mount IP:/nfs_dir mount_point
+
+client out ports: TCP:2049 TCP:40398 (2. porttan emin degilim, acik olmadiginda calismiyordu)
+
+mount qemu disk
+===============
+## mount
+sudo modprobe nbd max_part=8
+sudo qemu-nbd --connect=/dev/nbd0 [disk image]
+sudo mount /dev/nbd0p1 [mount point]
+
+## umount
+sudo umount [mount point]
+sudo qemu-nbd -d /dev/nbd0
+
+mount qemu share
+===============
+mount -t 9p -o trans=virtio,version=9p2000.L,rw share /mnt
+
+mount encrypted disk
+====================
+# mount
+cryptsetup luksOpen /dev/sd[?] [name]
+mount /dev/mapper/[name] [mount point]
+
+# umount
+umount [mount point]
+cryptsetup remove [name]
+
+
+mount raw disk
+==============
+## mount
+losetup /dev/loop0 [disk image]
+partx -va /dev/loop0
+mount /dev/mapper/loop0pX [mount point]
+
+## umount
+umount [mount point]
+kpartx -d /dev/loop0
+losetup -d /dev/loop0
