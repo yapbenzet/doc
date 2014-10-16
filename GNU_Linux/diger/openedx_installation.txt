@@ -101,8 +101,23 @@ https://github.com/edx/edx-platform/wiki/Stanford-Theming
 https://github.com/edx/configuration/wiki/edX-Managing-the-Production-Stack#compile-assets-manually
 		compile assets manually
 
-iki klasore de kopyaladik
-/edx/app/edxapp/themes/
-/edx/var/edxapp/themes/
 
-tema adi default
+/edx/app/edxapp/lms.env.json
+	FEATURES.USE_CUSTOM_THEME = True
+	THEME_NAME = "[tema_adi]"
+	PLATFORM_NAME = "[platform_adi]"
+
+
+download
+	git clone https://github.com/Stanford-Online/edx-default-theme.git
+	mv edx-default-theme /edx/app/edxapp/themes/[tema_adi]
+
+compile
+	sudo -H -u edxapp bash
+	source /edx/app/edxapp/edxapp_env
+	cd /edx/app/edxapp/edx-platform
+	paver update_assets cms --settings=aws
+	paver update_assets lms --settings=aws
+
+restart
+	sudo /edx/bin/supervisorctl -c /edx/etc/supervisord.conf restart edxapp:
