@@ -121,3 +121,38 @@ compile
 
 restart
 	sudo /edx/bin/supervisorctl -c /edx/etc/supervisord.conf restart edxapp:
+
+
+
+
+disable register
+=================
+/edx/app/edxapp/edx-platform/lms/urls.py
+	change register url to login
+
+
+
+admin page
+==========
+eger aktif degilse, django admini aktif et
+	 url/admin
+
+
+
+
+
+language
+========
+(https://groups.google.com/forum/#!topic/openedx-translation/yMO-y6v5AXA)
+1) You need to change LANGUAGE_CODE setting in /edx/app/edxapp/lms.env.json and /edx/app/edxapp/cms.env.json files for appropriate code (instead of or together with lms/envs/common.py as it noted in wiki).
+2) Also as it was mentioned here in forum that after language had been successfully changed the already existed users still have the default language (English). To change this issue you should make some modifications in database table user_api_userpreference. Here how you can do it:
+
+    log in into MySQL shell with command 'mysql -u edxapp001 -p' with password equal to 'password' (database access credentials can be found in /edx/app/edxapp/lms.auth.json file)
+    change database to edxapp with command 'use edxapp;'
+    you can check language preferences for users in user_api_userpreference table - 'select * from user_api_userpreference;' (look for records with key='pref-lang')
+    you can change language preference for users by modify specific records or simply delete them:
+        'update user_api_userpreference set value="LANGUAGE_CODE" where user_id=USER_ID;' where LANGUAGE_CODE is preferred language code and USER_ID is your user's id
+        'update user_api_userpreference set value="LANGUAGE_CODE";' to change language preferences for all users
+        'delete from user_api_userpreference where user_id=USER_ID;' to delete language preference for particular user (in this case the system will take the default language for this user, i.e. from setting file)
+
+Hope this info will help someone in future and decrease amount of time spent for localization process!
