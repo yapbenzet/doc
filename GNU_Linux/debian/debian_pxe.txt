@@ -1,0 +1,72 @@
+SERVER
+=======
+
+## installed packages ##
+apt-get install tftp-hpa nfs-kernel-server debootstrap syslinux
+
+
+## installation ##
+mkdir -p /srv/tftp /srv/nfsroot
+echo "/srv/nfsroot $IP/24(ro,no_root_squash,no_subtree_check)" >> /etc/exports
+
+debootstrap wheezy /srv/nfsroot http://ftp.nl.debian.org/debian
+chroot /srv/nfsroot apt-get update
+chroot /srv/nfsroot apt-get install initramfs-tools linux-image-3.2.0-4-amd64
+
+sed 's/BOOT=local/BOOT=nfs/' -i /srv/nfsroot/etc/initramfs-tools/initramfs.conf
+echo aufs >> /srv/nfsroot/etc/initramfs-tools/modules
+
+
+### /srv/nfsroot/etc/initramfs-tools/scripts/init-bottom/aufs ###
+	modprobe aufs
+	mkdir /ro /rw /aufs
+	mount -t tmpfs tmpfs /rw -o noatime,mode=0755
+	mount --move $rootmnt /ro
+	mount -t aufs aufs /aufs -o noatime,dirs=/rw:/ro=ro
+	mkdir -p /aufs/rw /aufs/ro
+	mount --move /ro /aufs/ro
+	mount --move /rw /aufs/rw
+	mount --move /aufs /root
+	exit 0
+
+chroot /srv/nfsroot update-initramfs -u
+cp /srv/nfsroot/boot/initrd.img-3.2.0-4-amd64 /srv/tftp/
+cp /srv/nfsroot/boot/vmlinuz-3.2.0-4-amd64 /srv/tftp/
+cp /usr/lib/syslinux/pxelinux.0 /srv/tftp
+mkdir /srv/tftp/pxelinux.cfg
+
+### /srv/tftp/pxelinux.cfg/default ###
+	default Debian
+	prompt 1
+	timeout 10
+	label Debian
+	kernel vmlinuz-3.2.0-4-amd64
+	append ro initrd=initrd.img-3.2.0-4-amd64 root=/dev/nfs ip=dhcp nfsroot=$IP:/srv/nfsroot
+
+
+### /etc/default/tftpd-hpa ###
+	TFTP_USERNAME="tftp"
+	TFTP_DIRECTORY="/srv/tftp"
+	TFTP_ADDRESS="0.0.0.0:69"
+	TFTP_OPTIONS="--secure"
+
+###  /etc/dhcp/dhcpd.conf ###
+	 next-server $IP;
+	 allow bootp;
+	 allow booting;
+
+## start service ##
+/etc/init.d/rpcbind start
+/etc/init.d/nfs-kernel-server start
+/etc/init.d/isc-dhcp-server start
+/etc/init.d/tftpd-hpa start
+
+## ports ##
+in UDP: 53, 67, 68, 69, 111, 2049, 8612
+out UDP: ALL
+in tcp: 111, 2049, 34973
+out TCP: 111
+
+
+## paket temizligi ##
+linux-image modulleri icerdigi icin silinmemeli

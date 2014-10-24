@@ -1,0 +1,36 @@
+
+## lid close action ##
+gnome-tweak-tool ile ayarlanabilir
+
+
+## auto-start ##
+### /etc/xdg/autostart ###
+copy .desktop ~/.config/autostart
+dosyada X-GNOME-Autostart-enabled=false yap
+
+### /usr/share/dbus-1/system-services ###
+mv .service .service.disabled
+
+
+## ia32-libs (enable multiarch) ##
+dpkg --add-architecture i386
+
+
+## disable multiarch ##
+apt-get remove --purge `dpkg --get-selections | grep i386 | awk '{print $1}'`
+dpkg --remove-architecture i386
+
+
+## bash completion ##
+/etc/bash.bashrc
+	# enable bash completion in interactive shells
+	#if [ -f /etc/bash_completion ]; then
+	#    . /etc/bash_completion
+	#fi
+yorum satirini ac
+apt-get install command-not-found
+
+
+## gnome3 cairo-dock ##
+org/gnome/metacitiy compositing-manager
+cairo-dock -e gnome

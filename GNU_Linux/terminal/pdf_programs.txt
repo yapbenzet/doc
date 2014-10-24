@@ -1,0 +1,29 @@
+change compression / fix pdf
+=============================
+gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -sOutputFile=new_file.pdf original_file.pdf
+
+/screen : lowest file-size
+/ebook : medium file-size
+/printer : biggest file size
+
+pdf-jpeg-png convert
+====================
+(program imagemagick paketinde geliyor)
+convert file1.jpg file2.jpg files.pdf
+
+## belli sayfalari cevirme
+convert -scale 1280x800 -density 300 -quality 100 x.pdf[0-3] x.png
+
+
+
+pdfshuffler
+===========
+- crop
+- rotate
+- arrange pages
+
+
+pdfmod
+======
+- edit bookmarks
+(sayfa silme ve yer degistirme destekliyor fakat bu islemlerde problem cikarabiliyor)

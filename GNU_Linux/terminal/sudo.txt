@@ -1,0 +1,7 @@
+sudo visudo
+   user ALL=(sandbox)   NOPASSWD:  /usr/bin/schroot
+// user,  /usr/bin/schroot programini parola gerekmeden sandbox useriyle calistirir
+
+
+## user not in sudoers file ##
+gpasswd -a [user] sudo

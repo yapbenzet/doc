@@ -1,0 +1,24 @@
+## install wheezy ##
+
+sudo debootstrap --variant=buildd wheezy [directory]
+
+## /etc/schroot/schroot.conf ##
+[wheezy]
+description=
+type=directory
+directory=[directory]
+users=[users]
+root-groups=
+profile=desktop
+personality=linux
+preserve-environment=true
+
+## locale problem ##
+apt-get install locales
+dpkg-reconfigure locales
+
+## device files ##
+touch /dev/null
+/etc/schroot/[profile]/fstab
+	/dev/null       /dev/null       none    rw,bind         0       0
+
