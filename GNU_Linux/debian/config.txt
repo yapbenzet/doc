@@ -33,3 +33,7 @@ apt-get install command-not-found
 ## gnome3 cairo-dock ##
 org/gnome/metacitiy compositing-manager
 cairo-dock -e gnome
+
+
+## firefox ##
+http://mozilla.debian.net/

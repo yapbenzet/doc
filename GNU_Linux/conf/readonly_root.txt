@@ -1,0 +1,40 @@
+## /dev ##
+umount /dev/shm
+umount /dev/pts
+telinit 1
+cd /
+cp -a dev .dev
+
+## /var ##
+mv /var /.var
+
+## init script ##
+/sbin/tmpdev
+   #!/bin/sh
+   #dev
+   mount -n dev /dev -t tmpfs
+   cp -a /.dev/* /dev
+   #var
+   mount -n var /var -t tmpfs
+   rsync -rv --exclude=cache --exclude=lib --exclude=log /.var/ /var/
+   mkdir /var/lib
+   mkdir /var/cache
+   mount --bind /.var/cache /var/cache
+   mount --bind /.var/lib /var/lib
+   exec /sbin/init
+
+## /etc/default/grub ##
+GRUB_CMDLINE_LINUX_DEFAULT="init=/sbin/tmpdev"
+update-grub
+
+## fstab ##
+root -> ro,error=remount-ro
+dev /dev tmpfs defaults,noauto 0 0
+tmp /tmp tmpfs defaults 0 0
+var /var tmpfs defaults,noauto 0 0
+
+## /etc/grub.d/00_header ##
+function recordfail {
+	# hepsini yorum satiri yap
+	set recordfail=0
+}

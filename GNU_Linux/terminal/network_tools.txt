@@ -1,0 +1,8 @@
+## dhcp client listesi ##
+arp
+
+## display bandwith usage ##
+iftop -p -n -i [interface]
+
+## print network connections ##
+sudo netstat -antup

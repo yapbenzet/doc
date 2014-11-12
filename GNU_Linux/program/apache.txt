@@ -1,0 +1,7 @@
+## debian installation ##
+### lamp ###
+apt-get install apache2 mysql-server php5 php5-mysql
+a2enmod rewrite
+
+### phpmyadmin ###
+apt-get install phpmyadmin

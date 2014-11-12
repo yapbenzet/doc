@@ -1,0 +1,5 @@
+
+## xorg ##
+sudo Xorg -configure
+sudo dpkg-reconfigure -phigh xserver-xorg
+
