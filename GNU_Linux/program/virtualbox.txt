@@ -1,0 +1,19 @@
+## linux client shared folder ##
+   sudo adduser <username> vboxsf
+   reboot
+/media altinda otomatik gorunur
+
+
+## virtualbox disk shrink ##
+
+### linux sanal makineden
+dd if=/dev/zero of=/zerofile
+sync
+rm /zerofile
+
+### windows sanal makineden
+download SysinternalsSuite
+sdelete –z
+
+### disaridan
+VBoxManage modifyhd --compact disk.vdi

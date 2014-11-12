@@ -1,0 +1,6 @@
+
+## qemu disk convert ##
+qemu-img convert -f [in_format] -O [out_format] [infile] [outfile]
+
+## qemu disk compress ##
+qemu-img convert -c -f [in_format] -O [out_format] [in_disk] [out_disk]

@@ -1,0 +1,5 @@
+hidepid=0 default
+hidepid=2 kullanici sadece kendi processlerini gorebilir
+
+## fstab ##
+proc            /proc           proc    defaults,hidepid=2,gid=1000        0       0

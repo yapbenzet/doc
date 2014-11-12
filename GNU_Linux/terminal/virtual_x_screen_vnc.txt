@@ -1,0 +1,7 @@
+## server
+Xvfb :1 -screen 0 1920x1080x16 -ac
+x11vnc -display :1 -localhost -forever -wait 50 -wait_ui 1.0 -ncache_cr -ncache 10
+
+## client
+ssvncviewer localhost -compresslevel 0 -quality 9
+

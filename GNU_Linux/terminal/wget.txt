@@ -1,0 +1,2 @@
+## site download ##
+wget -m -p -E -k -K -np [site]

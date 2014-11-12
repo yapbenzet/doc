@@ -39,7 +39,7 @@ mount /dev/mapper/loop0pX [mount point]
 
 ## umount
 umount [mount point]
-kpartx -d /dev/loop0
+partx -d /dev/loop0
 losetup -d /dev/loop0
 
 

@@ -1,0 +1,9 @@
+# disable tab click
+echo -n c > /sys/devices/platform/i8042/serio1/flags
+
+# enable tab click
+echo -n C > /sys/devices/platform/i8042/serio1/flags
+
+# disable scroll
+echo -n 0 > /sys/devices/platform/i8042/serio1/hscroll
+echo -n 0 > /sys/devices/platform/i8042/serio1/vscroll

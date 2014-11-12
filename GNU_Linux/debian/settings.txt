@@ -1,3 +1,0 @@
-disable lid close action
-========================
-gnome-tweakt-tool ile

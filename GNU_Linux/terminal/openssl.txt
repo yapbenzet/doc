@@ -1,0 +1,2 @@
+## change passphrase ##
+openssl rsa -aes256 -in in.key -out out.key
