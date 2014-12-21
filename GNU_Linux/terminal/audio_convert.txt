@@ -14,3 +14,10 @@ done
 for x in *.ogg;
 	do sox "$x" -C 192.2 "`basename "$x" .ogg`.mp3";
 done
+
+
+## mp4 to ogg ##
+ffmpeg -i videofile.mp4 -vn -acodec libvorbis -ab 192k audiofile.ogg
+
+## media info
+mediainfo --fullscann file

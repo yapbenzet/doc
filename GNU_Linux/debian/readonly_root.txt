@@ -1,0 +1,21 @@
+### fstab
+remove /
+
+### kernel modules
+echo aufs >> /etc/initramfs-tools/modules
+
+### /etc/initramfs-tools/scripts/init-bottom/root-aufs ###
+	modprobe aufs
+	mkdir -p /ro /rw /aufs
+	mount -t tmpfs tmpfs /rw -o noatime,mode=0755
+	mount --move $rootmnt /ro
+	mount -t aufs aufs /aufs -o noatime,dirs=/rw:/ro=ro
+	mkdir -p /aufs/ro /aufs/rw
+	mount --move /ro /aufs/ro
+	mount --move /rw /aufs/rw
+	mount --move /aufs $rootmnt
+	exit 0
+chmod +x /etc/initramfs-tools/scripts/init-bottom/root-aufs
+
+###
+update-initramfs -u

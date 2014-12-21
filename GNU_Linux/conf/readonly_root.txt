@@ -7,6 +7,7 @@ cp -a dev .dev
 
 ## /var ##
 mv /var /.var
+mkdir /var
 
 ## init script ##
 /sbin/tmpdev
@@ -32,6 +33,9 @@ root -> ro,error=remount-ro
 dev /dev tmpfs defaults,noauto 0 0
 tmp /tmp tmpfs defaults 0 0
 var /var tmpfs defaults,noauto 0 0
+
+## disable filesystem check
+touch /fastboot
 
 ## /etc/grub.d/00_header ##
 function recordfail {
