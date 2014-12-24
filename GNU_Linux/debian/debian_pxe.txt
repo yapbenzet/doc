@@ -55,6 +55,9 @@ mkdir /srv/tftp/pxelinux.cfg
 	 allow bootp;
 	 allow booting;
 
+### /etc/default/nfs-kernel-server
+RPCMOUNTDOPTS="-p 4002 -o 4003"
+
 ## start service ##
 /etc/init.d/rpcbind start
 /etc/init.d/nfs-kernel-server start
@@ -62,10 +65,10 @@ mkdir /srv/tftp/pxelinux.cfg
 /etc/init.d/tftpd-hpa start
 
 ## ports ##
-in UDP: 53, 67, 68, 69, 111, 2049, 8612
-out UDP: ALL
-in tcp: 111, 2049, 34973
-out TCP: 111
+in UDP: 53, 67, 68, 69, 111, 2049
+in tcp: 111, 2049, 4002
+out UDP: ALL ???
+out TCP: 111, 4003
 
 
 ## paket temizligi ##
