@@ -1,0 +1,84 @@
+a/ -> source dir
+b/ -> target dir
+DISKNAME -> cryptsetup name
+/dev/loop5 -> target device
+-----------------------------
+
+# create disk file
+randomgen 5000000K > TEST.img
+
+# create partition table
+echo -e "o\nw" | sudo fdisk TEST.img
+
+# create 150000K sda1
+echo -e "n\np\n1\n\n+150000K\nw" | sudo fdisk TEST.img
+
+# create sda2
+echo -e "n\np\n2\n\n\nw" | sudo fdisk TEST.img
+
+# losetup
+sudo losetup /dev/loop6 TEST.img
+sudo partx -va /dev/loop6
+
+# create /boot partition
+sudo mkfs.ext2 /dev/loop6p1
+
+# copy /boot partition
+sudo mount -o ro [boot_image] a/
+sudo mount /dev/loop6p1 b/
+rsync --progress --delete --checksum -axXH -h a/ b/
+sudo umount a/ b/
+
+# create / partition
+sudo cryptsetup --verify-passphrase luksFormat /dev/loop6p2 -c aes-xts-plain64 -s 512 -h sha512
+sudo cryptsetup luksOpen /dev/loop6p2 DISKNAME
+sudo mkfs.btrfs /dev/mapper/DISKNAME
+
+# copy /
+sudo mount -o ro [root_disk] a/
+sudo mount -o compress=lzo,ssd,space_cache,noatime,nodiratime /dev/mapper/DISKNAME b/
+rsync --progress --delete --checksum -axXH -h a/ b/
+sudo umount a/
+
+# b/etc/fstab
+...
+/dev/mapper/DISKNAME / btrfs compress=lzo,ssd,space_cache,noatime,nodiratime 0 1
+UUID=x /boot ext2 noatime 0 2
+
+# b/etc/crypttab
+DISKNAME UUID=... none luks
+
+# mount others
+sudo mount /dev/loop5p1 b/boot
+sudo mount --bind /dev b/dev
+sudo mount --bind /proc b/proc
+
+# b/boot/grub/device.map
+(hd0) /dev/loop5
+(hd0,1) /dev/loop5p1
+(hd0,2) /dev/loop5p2
+
+# install grub
+sudo chroot b/
+echo "nameserver 127.0.0.1" > etc/resolv.conf
+apt-get install btrfs-tools
+# update-initramfs -u ile ilgili hata olmamali
+update-grub
+grub-install --no-floppy --grub-mkdevicemap=/boot/grub/device.map /dev/loop5
+
+---------------------
+# mount all
+sudo losetup /dev/loop5 TEST.img
+sudo partx -va /dev/loop5
+sudo cryptsetup luksOpen /dev/loop5p2 DISKNAME
+
+sudo mount -o compress=lzo,ssd,space_cache,noatime,nodiratime /dev/mapper/DISKNAME b/
+sudo mount /dev/loop5p1 b/boot
+sudo mount --bind /dev b/dev
+sudo mount --bind /proc b/proc
+
+
+# umount all
+umountlist b/ | sudo sh
+sudo partx -d /dev/loop5
+sudo losetup -d /dev/loop5
