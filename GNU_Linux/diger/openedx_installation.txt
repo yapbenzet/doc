@@ -21,6 +21,11 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'you@yourdomain.com'
 
 
+IP Degisikligi
+==============
+!!! ekle
+
+
 Yonetim
 =======
 ## status ##
@@ -45,15 +50,12 @@ queuename ile kuyruk olustur. Bir ders icin bir kuyruk yeterli
 sudo /edx/bin/supervisorctl -c /edx/etc/supervisord.conf restart xqueue:
 
 
-
-
 grader server
 =============
 sudo easy_install path.py==2.4.1
 sudo easy_install requests==0.14.2
 sudo pip install dogstatsd-python==0.2
 sudo apt-get install gcc
-
 
 manage py
 ==========
@@ -84,7 +86,7 @@ domain : www.example.org
 /edx/app/edxapp/lms.env.json
 /edx/app/edxapp/cms.env.json
 
-LSM_BASE:www.example.org
+LMS_BASE:www.example.org
 CMS_BASE:www.example.org:18010,
 PREVIEW_LMS_BASE:www.example.org
 SESSION_COOKIE_DOMAIN:.example.org
