@@ -1,0 +1,73 @@
+Kurulum
+=======
+kurulum sırasında sadece sistem bileşenleri seçildi, desktop yok
+
+disable recommends:
+/etc/apt/apt.conf.d/01norecommend
+  APT::Install-Recommends "0";
+  APT::Install-Suggests "0";
+
+## kurulan paketler ##
+Not: gnome-core once kuruldu sonra silindi.  Kurulum sirasinda gnome-core, gnome
+icin gereken tum paketleri kuruyor.  Silinme sebebi gnome-user-guide,
+gnome-contacts gibi seylerden kurtulmak.  Asagidaki sirayla kuruldugunda,
+gnome-core silinirse gnome-session hala kaliyor. Istenilen sonuc.
+
+### gnome kurulumu
+apt-get install gnome-core
+apt-get install --install-recommends network-manager-gnome
+apt-get install gnome-tweak-tool gedit gedit-plugins
+
+### gnome-core icerisindeki gerekli bilesenleri manual kurulum olrak isaretliyoruz
+apt-get install baobab caribou caribou-antler fonts-cantarell gucharmap gtk2-engines sound-theme-freedesktop
+apt-get install gnome-calculator gnome-disk-utility gnome-packagekit gnome-menus gnome-shell-extensions gnome-system-log gnome-power-manager gnome-system-monitor gnome-font-viewer gvfs-bin gvfs-fuse
+
+### gereksiz gnome bilesenlerini siliyoruz
+apt-get autoremove gnome-core tracker gnome-user-guide gnome-contacts
+
+### ratpoison lightdm ile daha iyi calisiyor
+apt-get install --install-recommends lightdm
+
+###
+apt-get install mg
+apt-get autoremove vim-common
+
+### lightdm ile screensaver calismiyor, xscreensaver kullaniyoruz
+apt-get install xscreensaver
+
+/usr/share/gnome/autostart/xscreensaver.desktop
+[Desktop Entry]
+Name=XScreenSaver
+GenericName=XScreenSaver
+Comment=XScreenSaver
+Exec=xscreensaver
+Terminal=false
+Type=Application
+X-GNOME-Autostart-enabled=true
+
+
+Karsilasilan Problemler
+=======================
+
+### ratpoison mouse cursor problemi
+dconf write /org/gnome/settings-daemon/plugins/cursor/active false
+
+### ratpoison pencere izi kalma problemi
+lightdm kullan
+lightdm background=...: /etc/lightdm/lightdm-gtk-greeter.conf
+
+### ethernet bağlantı görünmeme problemi
+/etc/NetworkManager/NetworkManager.conf -> managed=true
+/etc/network/interfaces -> eth0 ile herşeyi sil
+
+### radeon hd 6670
+apt-get install firmware-linux
+
+
+### gdm olmayınca gnome lightdm ile açılmıyor
+
+### ratpoison icerisinden ekran çözünürlüğü ayarlama
+arandr
+
+### terminal yeni pencere pwd degisiyor
+bashrc -> source /etc/profile.d/vte.sh
