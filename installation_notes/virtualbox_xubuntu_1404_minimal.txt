@@ -1,0 +1,41 @@
+## standart xubuntu kurulum ##
+disk -> 8 GB
+
+## /etc/apt/apt.conf.d/01norecommend ##
+APT::Install-Recommends "0";
+APT::Install-Suggests "0";
+
+## install kernel ##
+apt-get install linux-image-virtual-lts-utopic linux-headers-virtual-lts-utopic
+remove old linux-image-..
+
+## güncelleştirmeleri yap ##
+
+## virtualbox-guest-additions cdden kurulum ##
+
+## dropped files folder ##
+rm -rf ~/Documents/VirtualBox\ Dropped\ Files
+ln -s /tmp ~/Documents/VirtualBox\ Dropped\ Files
+
+## remove packages ##
+apt-get autoremove gimp-data gimp-help-common
+apt-get autoremove abiword-common gnumeric-common gnumeric pidgin-data thunderbird gmusicbrowser transmission-common xchat-common
+apt-get autoremove xfburn gnome-sudoku gnome-mines gigolo gnome-user-guide
+apt-get autoremove fonts-nanum libc6-dbg onboard-data
+apt-get autoremove cups-common xfce4-dict simple-scan parole
+apt-get autoremove printer-driver-c2esp printer-driver-foo2zjs printer-driver-foo2zjs-common printer-driver-min12xxw printer-driver-ptouch printer-driver-sag-gdi printer-driver-pxljr
+apt-get autoremove libsane xubuntu-community-wallpapers orage
+
+## package installation ##
+apt-get install gnome-disk-utility default-jre
+
+-----------------------------------------------------------------
+
+## menu -> devices -> shared clipboard & drag & drop ##
+
+# vbox paylasim
+usermod -g vboxsf ubuntu
+
+## xfce4 ayarlari
+- ekran koruyucusunu kapat
+- keyboard -> application shortcuts -> xfce4-popup-whisermenu

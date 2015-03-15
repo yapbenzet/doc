@@ -1,3 +1,8 @@
+## usb share ##
+!!! not tested
+usermod -a -G vboxusers [user]
+
+
 ## linux client shared folder ##
    sudo adduser <username> vboxsf
    reboot

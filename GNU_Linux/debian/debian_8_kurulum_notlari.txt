@@ -18,15 +18,16 @@ apt-get install gnome-core
 apt-get install --install-recommends network-manager-gnome
 apt-get install gnome-tweak-tool gedit gedit-plugins
 
+### ratpoison lightdm ile daha iyi calisiyor
+ayrica onceki islemlerde recommends kapali oldugundan x11 kurulmadi. burada kuruluyor.
+apt-get install --install-recommends lightdm
+
 ### gnome-core icerisindeki gerekli bilesenleri manual kurulum olrak isaretliyoruz
 apt-get install baobab caribou caribou-antler fonts-cantarell gucharmap gtk2-engines sound-theme-freedesktop
 apt-get install gnome-calculator gnome-disk-utility gnome-packagekit gnome-menus gnome-shell-extensions gnome-system-log gnome-power-manager gnome-system-monitor gnome-font-viewer gvfs-bin gvfs-fuse
 
 ### gereksiz gnome bilesenlerini siliyoruz
 apt-get autoremove gnome-core tracker gnome-user-guide gnome-contacts
-
-### ratpoison lightdm ile daha iyi calisiyor
-apt-get install --install-recommends lightdm
 
 ###
 apt-get install mg

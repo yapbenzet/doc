@@ -1,0 +1,40 @@
+## ubuntu 14.04 chroot ##
+sudo debootstrap trusty ubuntu_1404_android http://archive.ubuntu.com/ubuntu/
+
+## localegen ##
+dpkg-reconfigure locales
+
+## /apt/sources.list ##
+deb http://nl.archive.ubuntu.com/ubuntu trusty main universe
+
+## /etc/apt/apt.conf.d/01norecommend ##
+APT::Install-Recommends "0";
+APT::Install-Suggests "0";
+
+## adb icin gerekli paketler ##
+sudo apt-get install lib32z1 lib32ncurses5 lib32bz2-1.0 g++-multilib
+
+## android studio için gerekli paketler ##
+sudo apt-get install openjdk-7-jdk
+
+## chroot'dan kvm erisimi ##
+// chroot icinden
+touch /dev/kvm
+
+// host sistem uzerinden
+usermod -g kvm [sandbox_user]
+
+## clean ##
+apt-get autoremove initramfs-tools vim-common kmod isc-dhcp-common
+
+## fstab ##
+/proc           /proc           none    rw,bind         0       0
+/dev/null       /dev/null       none    rw,bind         0       0
+/dev/kvm        /dev/kvm        none    rw,bind         0       0
+tmpfs /run/shm 	tmpfs defaults,noatime,nosuid,nodev,mode=1777,size=256M 0 0
+tmpfs /tmp 			  tmpfs defaults,noatime,nosuid,nodev,mode=1777,size=1024M 0 0
+/dev/bus/usb/001/019            /dev/bus/usb/001/019            none    rw,bind         0       0
+
+------------------------------------------------
+/mnt/android_studio/android-sdk-linux/tools/emulator64-x86 -avd test -no-audio
+/mnt/android_studio/android-studio/bin/studio.sh

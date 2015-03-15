@@ -1,0 +1,5 @@
+## altyazilari birlestirme ##
+http://pas-bien.net/2srt2ass/
+
+## convert subtitle encoding ##
+iconv -f WINDOWS-1254 -t UTF-8

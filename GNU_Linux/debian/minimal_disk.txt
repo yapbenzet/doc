@@ -1,0 +1,6 @@
+dpkg -l | grep ^rc | awk '{print $2}' | xargs dpkg -P
+
+find /var -name "*-old" -exec rm -f {} \;
+rm -rf /var/lib/apt/lists/* /var/log/* /var/cache/apt/*
+rm -rf /var/cache/man
+rm -rf /usr/share/locales
