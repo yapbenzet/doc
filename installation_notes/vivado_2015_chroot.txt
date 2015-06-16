@@ -1,0 +1,22 @@
+## ubuntu 14.04 chroot ##
+sudo debootstrap trusty ubuntu_1404_android http://archive.ubuntu.com/ubuntu/
+
+
+## sandbox user ##
+root olarak chroota girip
+useradd -m sandbox
+mkdir /home/sandbox && chown sandbox /home/sandbox
+
+
+## libraries ##
+libxtst6 libxrender1 libxi6
+
+
+## kurulum ##
+standart kurulum
+
+
+## gereksiz dosyalar ##
+/mnt/vivado/.xinstall/
+/mnt/vivado/SDK/2015.1/gnu/microblaze/
+
