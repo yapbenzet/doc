@@ -1,3 +1,6 @@
+Ubuntu 14.04 Chroot
+===================
+
 ## ubuntu 14.04 chroot ##
 sudo debootstrap trusty ubuntu_1404_android http://archive.ubuntu.com/ubuntu/
 
@@ -20,3 +23,30 @@ standart kurulum
 /mnt/vivado/.xinstall/
 /mnt/vivado/SDK/2015.1/gnu/microblaze/
 
+
+## /usr/bin/firefox ##
+  #!/bin/bash
+  echo "$@" >> /dev/firefox.pipe
+
+## firefox pipe ##
+sandbox icerisinde
+	touch /dev/firefox.pipe
+
+host icerisinde
+	#!/bin/bash
+	pipe=/taner/mnt/firefox.pipe
+	while true
+	do
+		if read line < $pipe; then
+		   echo $line
+		   /usr/bin/iceweasel $line
+		fi
+	done
+
+
+
+CentOS Chroot
+=============
+
+## libraries ##
+yum install yum install libstdc++.i686 fontconfig.i686 libXi.i686 libXrender.i686 glib2.i686 libXext.i686 libXrender.i686 libSM.i686 2:libpng-1.2.49-1.el6_2.i686
