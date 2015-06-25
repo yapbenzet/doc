@@ -3,12 +3,32 @@ Ubuntu 14.04 Chroot
 
 ## ubuntu 14.04 chroot ##
 sudo debootstrap trusty /[path]/vivado-2015_1-rootfs/ http://archive.ubuntu.com/ubuntu/
+sudo umount /[path]/vivado-2015_1-rootfs/dev
+sudo rm -rf /[path]/vivado-2015_1-rootfs/dev && mkdir /[path]/vivado-2015_1-rootfs/dev
 
+cd /[path]/vivado-2015_1-rootfs/dev && sudo touch null zero urandom random tty firefox.pipe
+cd /[path]/vivado-2015_1-rootfs && ln -sf /bin/bash /bin/sh
 
 ## sandbox user ##
 root olarak chroota girip
 useradd -m sandbox
 mkdir /home/sandbox && chown sandbox /home/sandbox
+
+
+## clean chroot ##
+apt-get install nano
+apt-get autoremove initramfs-tools vim-common sudo cpio isc-dhcp-common kmod iproute2 adduser dh-python python3.4 python3.4-minimal xkb-data netcat-openbsd net-tools keyboard-configuration initramfs-tools-bin
+
+## libraries ##
+apt-get install --no-install-recommends --no-install-suggests libgtk2.0-0 libxtst6
+
+### docnav libraries ###
+apt-get --no-install-recommends --no-install-suggests install libc6:i386 libstdc++6:i386 fontconfig:i386 libxtst6:i386 libxrender1:i386 libglib2.0-0:i386 libsm6:i386
+
+
+## /[path]/vivado-2015_1-rootfs/home/sandbox/.bashrc ##
+export LC_ALL=C # xsdk icin
+source .../Vivado/2015.1/settings64.sh
 
 
 ## /etc/schroot/schroot.conf ##
@@ -32,10 +52,6 @@ tmpfs			/dev/shm		tmpfs	rw,nosuid,nodev 0		0
 tmpfs			/tmp			tmpfs	defaults,noatime,nosuid,nodev,mode=1777,size=256M 0 0
 /[path]/firefox.pipe /dev/firefox.pipe  	none    rw,bind         0       0
 /[path]/vivado-2015_1 /mnt/vivado-2015_1  	none    rw,bind         0       0
-
-
-## libraries ##
-libxtst6 libxrender1 libxi6
 
 
 ## kurulum ##
@@ -64,10 +80,5 @@ host icerisinde
 		fi
 	done
 
-
-
-CentOS Chroot
-=============
-
-## libraries ##
-yum install libstdc++.i686 fontconfig.i686 libXi.i686 libXrender.i686 glib2.i686 libXext.i686 libXrender.i686 libSM.i686 2:libpng-1.2.49-1.el6_2.i686
+## vivado problemleri ##
+export LC_ALL=C
