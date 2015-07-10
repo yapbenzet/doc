@@ -1,0 +1,109 @@
+Docker Owncloud Installation
+============================
+
+## configuration ##
+export OWNCLOUD_DIR=/tmp/test/owncloud
+export OWNCLOUD_DB_DIR=/tmp/test/owncloud-db
+export DB_ROOT_PASS=`randompass`
+
+## create directories ##
+mkdir -p $OWNCLOUD_DIR/data
+mkdir -p $OWNCLOUD_DB_DIR/mysql
+
+## ssl configuration ##
+### http://www.cyberciti.biz/faq/nginx-self-signed-certificate-tutorial-on-centos-redhat-linux/
+mkdir $OWNCLOUD_DIR/ssl
+cd $OWNCLOUD_DIR/ssl
+openssl genrsa -des3 -out self-ssl.key 2048
+openssl req -new -key self-ssl.key -out self-ssl.csr
+cp -v self-ssl.{key,original}
+openssl rsa -in self-ssl.original -out self-ssl.key
+rm -v self-ssl.original
+openssl x509 -req -days 365 -in self-ssl.csr -signkey self-ssl.key -out self-ssl.crt
+
+## mysql docker ##
+docker run -d \
+       --name owncloud-db \
+	   	--restart always \
+       -v ${OWNCLOUD_DB_DIR}/mysql:/var/lib/mysql \
+       -e MYSQL_ROOT_PASSWORD=$DB_ROOT_PASS \
+       -e MYSQL_DATABASE=owncloud \
+       mysql:5.5
+
+
+## owncloud docker ##
+docker run -d \
+    --name owncloud \
+	--restart always \
+    -p 443:443 \
+    -v $OWNCLOUD_DIR/ssl:/root/ssl \
+    -e "SSL_KEY=/root/ssl/self-ssl.key" \
+    -e "SSL_CERT=/root/ssl/self-ssl.crt" \
+    -v $OWNCLOUD_DIR/data:/owncloud \
+    --link owncloud-db:db \
+    jchaney/owncloud
+
+
+## first configuration ##
+https://[ip]/owncloud
+user : root
+pass : $DB_ROOT_PASS
+table : owncloud
+url : owncloud-db
+
+(docker inspect mysql-db | grep DB_ROOT_PASS)
+
+
+Move Another Server
+===================
+
+## old server ##
+
+### tar files ###
+docker stop owncloud owncloud-db
+export OWNCLOUD_DIR=[]
+export OWNCLOUD_DB_DIR=[]
+tar czfp owncloud.tar.gz -C $OWNCLOUD_DIR/ .
+tar czfp owncloud-db.tar.gz -C $OWNCLOUD_DB_DIR/ .
+
+## new server ##
+
+### untar files ###
+export OWNCLOUD_DIR=[]
+export OWNCLOUD_DB_DIR=[]
+mkdir $OWNCLOUD_DIR $OWNCLOUD_DB_DIR
+tar xf owncloud.tar.gz -C $OWNCLOUD_DIR/
+tar xf owncloud-db.tar.gz -C $OWNCLOUD_DB_DIR/
+
+### edit configuration ###
+nano $OWNCLOUD_DIR/data/config.php
+trusted_domains => ... url
+overwrite.cli.url => ... url
+
+
+### run mysql docker ###
+docker run -d \
+       --name owncloud-db \
+	   	--restart always \
+       -v ${OWNCLOUD_DB_DIR}/mysql:/var/lib/mysql \
+       mysql:5.5
+
+### run owncloud docker ###
+docker run -d \
+    --name owncloud \
+	--restart always \
+    -p 443:443 \
+    -v $OWNCLOUD_DIR/ssl:/root/ssl \
+    -e "SSL_KEY=/root/ssl/self-ssl.key" \
+    -e "SSL_CERT=/root/ssl/self-ssl.crt" \
+    -v $OWNCLOUD_DIR/data:/owncloud \
+    --link owncloud-db:db \
+    jchaney/owncloud
+
+
+Other Settings
+==============
+
+## mysql client ##
+docker run --rm -it --link owncloud-db:mysql --rm mysql:5.5 bash \
+-c 'exec mysql -h owncloud-db -P 3306 -uroot -p "$DB_ROOT_PASS"'
