@@ -62,6 +62,9 @@ kurulumdan sonra silinecek dosyalar:
 /mnt/vivado/.xinstall/
 /mnt/vivado/SDK/2015.1/gnu/microblaze/
 
+### board files ###
+https://reference.digilentinc.com/vivado:boardfiles
+
 
 ## /usr/bin/firefox ##
   #!/bin/bash
