@@ -17,6 +17,29 @@ useradd sshtunnel -m -d /home/sshtunnel -s /bin/false
 ~/.ssh/authorized_keys
 no-pty,no-X11-forwarding,no-agent-forwarding,command="/bin/echo do-not-send-commands" ssh-rsa rsa-public-key-code-goes-here keyuser@keyhost
 
+reverse port forwading user
+===========================
+## /etc/ssh/sshd_config ##
+Match User [user]
+      X11Forwarding no
+      PermitTunnel no
+      AllowAgentForwarding no
+      AllowTcpForwarding remote
+      GatewayPorts	no
+      PermitOpen none
+      ForceCommand echo "This account can only be used for reverse port forwading"
+
+## client ##
+autossh -M 0 [user]@[IP] -N -R 8080:localhost:80
+
+## forward 80 port to localhost:8080 ##
+iptables -t nat -I PREROUTING -p tcp -i eth0 --dport 80 -j DNAT --to-destination 127.0.0.1:8080
+
+/etc/sysctl.conf
+	net.ipv4.conf.eth0.route_localnet=1
+
+
+
 public key auth
 ===============
 client'daki id_rsa.pub icerigi ~/.ssh/authorized_keys dosyasina eklenir.
