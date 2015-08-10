@@ -107,3 +107,4 @@ Other Settings
 ## mysql client ##
 docker run --rm -it --link owncloud-db:mysql --rm mysql:5.5 bash \
 -c 'exec mysql -h owncloud-db -P 3306 -uroot -p "$DB_ROOT_PASS"'
+

@@ -1,5 +1,5 @@
 ## ubuntu 14.04 chroot ##
-sudo debootstrap trusty ubuntu_1404_android http://archive.ubuntu.com/ubuntu/
+sudo debootstrap trusty ubuntu_1404_android http://cz.archive.ubuntu.com/ubuntu/
 
 ## localegen ##
 dpkg-reconfigure locales

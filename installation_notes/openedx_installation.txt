@@ -29,11 +29,11 @@ IP Degisikligi
 Yonetim
 =======
 ## status ##
-sudo /edx/bin/supervisorctl -c /edx/etc/supervisord.conf status
+sudo /edx/bin/supervisorctl status
 
 ## restart ##
-sudo /edx/bin/supervisorctl -c /edx/etc/supervisord.conf restart edxapp:
-sudo /edx/bin/supervisorctl -c /edx/etc/supervisord.conf restart edxapp_worker:
+sudo /edx/bin/supervisorctl restart edxapp:
+sudo /edx/bin/supervisorctl restart edxapp_worker:
 
 
 
