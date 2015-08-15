@@ -29,7 +29,7 @@ apt-get install gnome-calculator gnome-disk-utility gnome-packagekit gnome-menus
 ### gereksiz gnome bilesenlerini siliyoruz
 apt-get autoremove gnome-core tracker gnome-user-guide gnome-contacts
 
-###
+### vim yerine mg
 apt-get install mg
 apt-get autoremove vim-common
 
@@ -45,6 +45,33 @@ Exec=xscreensaver
 Terminal=false
 Type=Application
 X-GNOME-Autostart-enabled=true
+
+
+### otomatik acilan programlari iptal et
+gconftool --type Boolean --set /apps/nautilus/preferences/media_automount false
+gconftool --type Boolean --set /apps/nautilus/preferences/media_automount_open false
+
+apt-get autoremove exim-config exim-base
+sudo systemctl disable ModemManager.service
+
+### otomatik acilan dbus ile iliskili programlar
+/usr/share/dbus/
+./services/org.gnome.OnlineAccounts.service.disabled
+./services/gvfs-daemon.service.disabled
+./services/gvfs-metadata.service.disabled
+./services/org.gnome.evolution.dataserver.AddressBook.service.disabled
+./services/org.gnome.evolution.dataserver.Calendar.service.disabled
+./services/org.gnome.evolution.dataserver.Sources.service.disabled
+./services/org.gnome.evolution.dataserver.UserPrompter.service.disabled
+./services/org.a11y.atspi.Registry.service.disabled
+./services/org.freedesktop.Telepathy.AccountManager.service.disabled
+./services/org.freedesktop.Telepathy.MissionControl5.service.disabled
+./services/org.gtk.Private.AfcVolumeMonitor.service.disabled
+./services/org.gtk.Private.GPhoto2VolumeMonitor.service.disabled
+./services/org.gtk.Private.MTPVolumeMonitor.service.disabled
+./services/org.gtk.Private.UDisks2VolumeMonitor.service.disabled
+./services/org.gtk.Private.GoaVolumeMonitor.service.disabled
+./services/org.a11y.Bus.service.disabled
 
 
 Karsilasilan Problemler
