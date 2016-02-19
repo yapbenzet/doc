@@ -1,0 +1,81 @@
+mkdir PackageName-version
+
+PackageName-version/Makefile:
+  DESTDIR=/
+  INSTALL_LOCATION=$(DESTDIR)/usr/
+  CFLAGS:=$(shell dpkg-buildflags --get CFLAGS)
+  LDFLAGS:=$(shell dpkg-buildflags --get LDFLAGS)
+  all:
+  	# build commands
+  install: PackageName
+  PackageName:
+  	# install commands
+  	mkdir -p $(INSTALL_LOCATION)/bin
+  	cp program_executable $(INSTALL_LOCATION)/bin/PackageName
+  	chmod 755 $(INSTALL_LOCATION)/bin/PackageName
+  clean:
+  	# ...
+  distclean: clean
+
+
+DEBEMAIL="mail@domain.com"
+DEBFULLNAME="Name"
+export DEBEMAIL DEBFULLNAME
+
+tar czf PackageName-version.orig.tar.gz PackageName-version/
+
+cd PackageName-version
+
+dh_make -f ../PackageName-version.orig.tar.gz
+
+>> Type of package: single binary, indep binary, multiple binary, library, kernel module, kernel patch?
+>> [s/i/m/l/k/n] s
+
+
+cd PackageName-version/debian
+rm -f *.ex *.EX README.*
+
+## edit PackageName-version/debian/control ##
+
+
+## edit PackageName-version/debian/changelog ##
+cd PackageName-version
+dch -i
+
+
+## edit PackageName-version/debian/copyright ##
+
+
+BUILD
+=====
+
+cd ../
+rm PackageName-version.orig.tar.gz
+tar czf PackageName-version.orig.tar.gz PackageName-version/
+
+cd PackageName-version
+debuild -us -uc
+
+
+ADD TO PPA
+==========
+
+## PPA dput configuration ##
+~/.dput.cf
+[ppa:...]
+fqdn = ppa.launchpad.net
+method = ftp
+incoming = ~NAME/ubuntu/...
+login = anonymous
+allow_unsigned_uploads = 0
+
+
+## ubuntu ##
+sed -i 's/unstable/trusty/g' PackageName-version/debian/changelog
+
+cd PackageName-version/
+debuild -us -uc -S -sa
+
+cd ../
+debsign -k[...] PackageName_version-X_source.changes
+dput [ppa:...] PackageName_version-X_source.changes
