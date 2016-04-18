@@ -1,8 +1,17 @@
+## bagli network bilgileri ##
+nmcli device show eth3
+
 ## dhcp client listesi ##
 arp
 
 ## display bandwith usage ##
 iftop -p -n -i [interface]
+slurm -s -i [interface]
 
 ## print network connections ##
 sudo netstat -antup
+
+
+## server - client network speed ##
+server: iperf -s
+client: iperf -c SERVER_IP

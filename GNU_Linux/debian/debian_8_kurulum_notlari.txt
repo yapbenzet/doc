@@ -99,3 +99,6 @@ arandr
 
 ### terminal yeni pencere pwd degisiyor
 bashrc -> source /etc/profile.d/vte.sh
+
+### lock screen timeout ###
+gnome-control-center -> Privacy -> Screen Lock

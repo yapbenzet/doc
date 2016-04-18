@@ -1,0 +1,4 @@
+
+## ssh rsync ##
+rsync directory with checksum
+rsync -aAXH -xhc --delete --progress --stats -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --progress /tmp/test USER@IP:/tmp/test
