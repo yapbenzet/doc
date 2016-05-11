@@ -1,0 +1,13 @@
+## ext4 without journal ##
+
+enable writeback mode
+tune2fs -o journal_data_writeback /dev/sdaX
+
+delete has_journal option
+tune2fs -O ^has_journal /dev/sdaX
+
+### check ###
+dmesg | grep sdaX
+
+  mounted filesystem with ordered data mode
+  mounted filesystem without journal

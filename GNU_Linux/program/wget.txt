@@ -1,2 +1,2 @@
 ## site download ##
-wget -m -p -E -k -K -np [site]
+wget -erobots=off -m -p -E -k -K -np [site]

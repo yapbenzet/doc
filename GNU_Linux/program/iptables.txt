@@ -1,0 +1,6 @@
+
+##  kullaniciya gore port yonlendirme ##
+
+iptables -t nat -A OUTPUT -p tcp --dport 80 -m owner --uid-owner root -j ACCEPT
+iptables -t nat -A OUTPUT -p tcp --dport 80 -m owner --uid-owner user -j ACCEPT
+iptables -t nat -A OUTPUT -p tcp --dport 80 -j REDIRECT --to-ports 1234
